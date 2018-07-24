@@ -2,3 +2,5 @@
 [File](https://github.com/ningbaoqi/Java/blob/master/README-file.md)
 ### 理解Java的IO流
 [理解Java的IO流](https://github.com/ningbaoqi/Java/blob/master/README-file1.md)
+### 字节流和字符流
+[字节流和字符流](https://github.com/ningbaoqi/Java/blob/master/README-file2.md)
