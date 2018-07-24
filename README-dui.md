@@ -14,3 +14,5 @@
 [Java8新增的Lambda表达式](https://github.com/ningbaoqi/Java/blob/master/README-j82.md)
 ### 面向对象建议
 [面向对象建议](https://github.com/ningbaoqi/Java/blob/master/README-j1.md)
+### 对象拷贝建议
+[对象拷贝建议](https://github.com/ningbaoqi/Java/blob/master/README-j2.md)
