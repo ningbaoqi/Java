@@ -112,5 +112,29 @@ public class Test{
        }
 }
 ```
-
+#### 选择排序算法
+```
+public class Test{
+       public static void main(String[] args){
+              int[] a = {4 , 3 , 5 , 7 , 1 , 6 , 8 , 2  , 10 , 9};
+              int size = a.length;
+              for(int i = 0 ; i < size -1 ; i++){
+                     int min = i;
+                     for(int j = i+1 ; j < size ; j++){
+                            if(a[j] < a[min]){
+                                   min = j;
+                            }
+                     }
+                     if(min != i){
+                            int temp = a[i];
+                            a[i] = a[min];
+                            a[min] = temp;
+                     }
+              }
+              for(int i : a){
+                     System.out.println(i);
+              }
+       }
+}
+```
 
