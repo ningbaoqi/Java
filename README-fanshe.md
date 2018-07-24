@@ -12,3 +12,5 @@
 [类的加载、连接和初始化](https://github.com/ningbaoqi/Java/blob/master/README-f5.md)
 ### Java中的堆与栈
 [Java中的堆与栈](https://github.com/ningbaoqi/Java/blob/master/README-f6.md)
+### 类加载机制及反射建议
+[类加载机制及反射建议](https://github.com/ningbaoqi/Java/blob/master/README-f7.md)
