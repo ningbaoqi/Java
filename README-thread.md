@@ -6,3 +6,5 @@
 [线程的生命周期](https://github.com/ningbaoqi/Java/blob/master/README-thread3.md)
 ### 控制线程
 [控制线程](https://github.com/ningbaoqi/Java/blob/master/README-thread4.md)
+### 线程同步
+[线程同步](https://github.com/ningbaoqi/Java/blob/master/README-thread5.md)
