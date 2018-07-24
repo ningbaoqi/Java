@@ -25,3 +25,5 @@ public class Common {
     }
 }
 ```
+### 泛型与数组
++ 只能声明`List<String>[]`形式的数组，但是不能创建`ArrayList<String>[10]`这样的数组对象；
