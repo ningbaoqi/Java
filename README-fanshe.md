@@ -6,3 +6,5 @@
 [使用反射生成并操作对象](https://github.com/ningbaoqi/Java/blob/master/README-f2.md)
 ### 使用反射生成JDK动态代理
 [使用反射生成JDK动态代理](https://github.com/ningbaoqi/Java/blob/master/README-f3.md)
+### 反射和泛型
+[反射和泛型](https://github.com/ningbaoqi/Java/blob/master/README-f4.md)
