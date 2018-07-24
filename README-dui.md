@@ -10,3 +10,5 @@
 [内部类](https://github.com/ningbaoqi/Java/blob/master/README-nei.md)
 ### Java8改进的接口
 [Java8改进的接口](https://github.com/ningbaoqi/Java/blob/master/README-j8.md)
+### Java8新增的Lambda表达式
+[Java8新增的Lambda表达式](https://github.com/ningbaoqi/Java/blob/master/README-j82.md)
