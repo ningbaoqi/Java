@@ -8,3 +8,5 @@
 [控制线程](https://github.com/ningbaoqi/Java/blob/master/README-thread4.md)
 ### 线程同步
 [线程同步](https://github.com/ningbaoqi/Java/blob/master/README-thread5.md)
+### 线程组和未处理的异常
+[线程组和未处理的异常](https://github.com/ningbaoqi/Java/blob/master/README-thread6.md)
