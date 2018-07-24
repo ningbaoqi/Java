@@ -125,3 +125,33 @@ class SafeStopThread extends Thread {
 + `interrupt方法不能终止一个正在执行着的线程，它只是修改中断标志而已`；`可以通过isInterrupted方法来获取`；
 #### 停止线程的另外方法
 + 可以使用的是`线程池（比如ThreadPoolExecutor类）`，那么可以通过`shutdown方法逐步关闭池中的线程`，它采用的是比较温和，安全的关闭线程方法，完全不会产生类似stop方法的弊端；
+
+### 线程建议---线程优先级只使用三个等级
++ 线程的优先级（Priority）决定了线程获得CPU运行的机会，优先级越高获得的运行机会越大，优先级越低获得的机会越小，Java的线程有10个等级（确切的说是11个级别，级别为0的线程是JVM的，应用程序不能设置该级别）；
+```
+class Client {
+    public static void main(String[] args) {
+        for (int i = 0; i < 20; i++) {
+            new TestThread().start(i % 10 + 1);
+        }
+    }
+}
+
+class TestThread extends Thread {
+    @Override
+    public synchronized void start(int _pro) {//正常情况下不要重写start方法，只是为了掩饰
+        Thread t = new Thread(this);
+        t.setPriority(_pro);
+        t.start();
+    }
+
+    @Override
+    public void run() {
+        for (int i = 0; i < 100000; i++) {//消耗CPU的计算
+            Math.hypot(Math.pow(924526789, i), Math.cos(i));
+        }
+        //删除线程优先级
+    }
+}
+```
++ `并不是严格遵循线程优先级级别来执行的；优先级差别越大，运行机会差别越明显`；线程优先级推荐使用`MIN_PRIORITY（1）、NORM_PRIORITY（5）、MAX_PRIORITY（10）三个级别`，不建议使用其他数字；
