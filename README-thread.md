@@ -4,3 +4,5 @@
 [线程的创建和启动](https://github.com/ningbaoqi/Java/blob/master/README-thread2.md)
 ### 线程的生命周期
 [线程的生命周期](https://github.com/ningbaoqi/Java/blob/master/README-thread3.md)
+### 控制线程
+[控制线程](https://github.com/ningbaoqi/Java/blob/master/README-thread4.md)
