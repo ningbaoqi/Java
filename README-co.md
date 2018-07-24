@@ -7,3 +7,5 @@
 [Set集合](https://github.com/ningbaoqi/Java/blob/master/README-set.md)
 ### Queue集合
 [Queue集合](https://github.com/ningbaoqi/Java/blob/master/README-queue.md)
+### HashSet和HashMap的性能选项
+[HashSet和HashMap的性能选项](https://github.com/ningbaoqi/Java/blob/master/README-hash.md)
