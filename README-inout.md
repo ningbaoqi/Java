@@ -14,3 +14,5 @@
 [对象序列化](https://github.com/ningbaoqi/Java/blob/master/README-file6.md)
 ### NIO
 [NIO](https://github.com/ningbaoqi/Java/blob/master/README-NIO.md)
+### Java7的NIO2
+[Java7的NIO2](https://github.com/ningbaoqi/Java/blob/master/README-NIO2.md)
