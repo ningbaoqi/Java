@@ -41,6 +41,103 @@
 
 + 所有以`parallel`开头的方法都表示该方法可利用CPU并行的能力来提高性能，上面的`Xxx`指的是不同的类型；
 
+### 数组建议
+#### 多种最值算法，适时选择
+##### 自行实现，快速查找最大值
+```
+public static int max(int[] data) {
+    int max = data[0];
+    for (int i:data) {
+        max = max > i ? max : i;
+    }
+    return max;
+}
+```
++ `这是我们经常使用的最大值算法，也是速度最快的算法，它不要求排序，只要遍历一遍数组即可找到最大值`；
+##### 先排序，后取值
+```
+public static int max(int[] data) {
+    Arrays.sort(data.clone());
+    return data[data.length - 1];
+}
+```
++ `如果数组数量少于10000时，两者基本没有差别，在同一毫秒级别里，此时就可以不用自己写算法了，直接使用数组先排序后取值的方式；最值计算时使用集合最简单，使用数组性能最优`；
+#### asList方法产生的List对象不可更改
+```
+public class Test {
+    public static void main(String[] args) {
+        Week[] workDays = {Week.MON, Week.TUE, Week.WED, Week.THU, Week.FRI};
+        List list = Arrays.asList(workDays);
+        list.add(Week.SAT);//运行时异常；UnSupportedOperationException
+    }
+}
+
+enum Week {
+    SUN , MON , TUE , WED , THU , FRI , SAT
+}
+```
++ `这是因为通过Arrays的asList方法返回的不是java.util.ArrayList，而是Arrays工具类的一个内置类，在该类中是不允许容器数据改变的`；
+
+|ArrayList静态内部类实现的5个方法|
+|------|
+|`size：元素数量`|
+|`toArray：转化为数组，实现了数组的浅拷贝`|
+|`get：获取制定元素`|
+|`set：重置某一元素值`|
+|`contains：是否包含某元素`|
+
++ `所以asList返回的是一个长度不可变的列表，数组是多长，转换成的列表也就是多长`；
+#### 避开基本类型数组转换集合列表陷阱
+```
+public class Test {
+    public static void main(String[] args) {
+        int[] data = {1, 2, 3, 4, 5};
+        List list = Arrays.asList(data);//从asList方法的实现来看，是因为传递的参数是泛型的，所以是将这个数组当作了一个对象进行处理的
+        list.size();//输出1
+        list.get(0).getClass();//输出class [I
+        data.equals(list.get(0));//true
+
+        //修改方案就是直接使用包装类
+        Integer[] data1 = {1, 2, 3, 4, 5};
+        List list1 = Arrays.asList(data1);
+        list1.size();//输出5
+    }
+}
+```
++ 注意：`在把基本类型数组转换成容器列表时，要特别小心asList方法的陷阱，避免出现程序逻辑混乱的情况；原始类型数组不能作为asList的输入参数，否则会引起程序逻辑混乱`；
+#### 警惕数组的浅拷贝
+```
+public class Test {
+    public static void main(String[] args) {
+        int ballNum = 7;
+        Ballon[] ball = new Ballon[ballNum];
+        for (int i = 0; i < ballNum; i++) {
+            ball[i] = new Ballon(Color.values()[i], i);
+        }
+        Ballon[] ball2 = Arrays.copyOf(ball, ball.length);//拷贝第一个箱子
+        ball2[6].setColor(Color.BLUE);//之后输出ball时，ball的第七个元素的Color为BLUE
+    }
+}
+
+enum Color {
+    RED , ORANGE , YELLOW , GREEN , INDIGO , BLUE , VOILET
+}
+
+class Ballon {
+    private int id;
+    private Color color;
+
+    public Ballon(Color color, int id) {
+        this.color = color;
+        this.id = id;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
+    }
+}
+```
++ `通过copyOf方法产生的数组是一个浅拷贝，基本类型是直接拷贝值，其他都是拷贝引用地址`，`需要说明的是，数组的clone方法也是浅拷贝，而且集合的clone方法也是浅拷贝，这就需要大家在拷贝时多留心了`；
 
 ### 算法
 [算法](https://github.com/ningbaoqi/Java/blob/master/README-suanfa.md)
