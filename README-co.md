@@ -15,3 +15,5 @@
 [操作集合的工具类：Collections](https://github.com/ningbaoqi/Java/blob/master/README-Collections.md)
 ### Java8增强的Map集合
 [Java8增强的Map集合](https://github.com/ningbaoqi/Java/blob/master/README-map.md)
+### 集合建议
+[集合建议](https://github.com/ningbaoqi/Java/blob/master/README-just.md)
