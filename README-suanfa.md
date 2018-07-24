@@ -93,3 +93,24 @@ public class Test{
        }
 }
 ```
+#### 插入排序算法
+```
+public class Test{
+       public static void main(String[] args){
+              int[] a = {4 , 3 , 5 , 7 , 1 , 6 , 8 , 2 , 10 , 9};
+              int size = a.length , temp , j;
+              for(int i = 1 ; i < size ; i++){
+                     temp = a[i];
+                     for(j = i ; j > 0 && temp < a[j - 1] ; j--){
+                            a[j] = a[j - 1];
+                     }
+                     a[j] = temp;
+              }
+              for(int i : a){
+                     System.out.println(i);
+              }
+       }
+}
+```
+
+
