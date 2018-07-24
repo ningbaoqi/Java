@@ -53,5 +53,43 @@ public class Test{
        }
 }
 ```
-
-
+#### 快速排序算法（效率高）
+```
+public class Test{
+       static void quickSort(int[] a , int start , int end){
+              if(start < end){
+                     int base = a[start];
+                     int temp;
+                     int i = start, j = end;
+                     do{
+                            while((a[i] < base) && (i < end)){
+                                   i++;
+                            }
+                            while((a[j] > base) && (j > start)){
+                                   j--;
+                            }
+                            if(i <= j){
+                                   temp = a[i];
+                                   a[i] = a[j];
+                                   a[j] = temp;
+                                   i++;
+                                   j--;
+                            }
+                     }while(i <= j);
+                     if(start < j){
+                            quickSort(a , start , j);
+                     }
+                     if(end > i){
+                            quickSort(a , i , end);
+                     }
+              }
+       }
+       public static void main(String[] args){
+              int[] a = {4 , 6 ,2 , 5 , 1 , 0 , 9 , 7 , 3 , 8 };
+              quickSort(a , 0 , a.length - 1);
+              for(int x : a){
+                     System.out.println(x + "");
+              }
+       }
+}
+```
