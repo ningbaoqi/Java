@@ -8,4 +8,4 @@
 [使用jar文件](https://github.com/ningbaoqi/Java/blob/master/README-jar.md)
 ### 内部类
 [内部类](https://github.com/ningbaoqi/Java/blob/master/README-nei.md)
-![image](https://github.com/ningbaoqi/Java/blob/master/gif/pic-20.jpg) 
+
