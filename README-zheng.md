@@ -92,3 +92,44 @@
 |X{n}|X{n}?|X{n}+|X表达式出现n次|
 |X{n,}|X{n,}?|X{n,}+|X表达式出现最少n次|
 |X{n,m}|X{n,m}?|X{n,m}+|X表达式出现最少n次最多m次|
+
+### 使用正则表达式
++ 一旦定义了正则表达式，就可以使用`Pattern`和`Matcher`来使用正则表达式；Pattern对象是正则表达式编译后在内存中的表示形式，因此，正则表达式字符串必须先被编译为Pattern对象，然后在利用该Pattern对象创建对应的Matcher对象，执行匹配所涉及的状态保留在Matcher对象中，多个Matcher对象可以共享同一个Pattern对象；
+
+```
+Pattern p = Pattern.compile("a*b");
+Matcher m = p.matcher("aaaaab");
+boolean b = m.matches();
+```
++ 上面定义的Pattern对象可以多次重复使用，如果某个正则表达式仅需使用一次，则可直接使用Pattern类的matches()静态方法，此方法自动把指定字符串编译成匿名的Pattern对象，并执行匹配；
+
+```
+boolean b = Pattern.matches("a*b" , "aaaaaaab");
+```
+
++ 上面的语句等效于前面三行代码，但是采用这种形式每次都需要重新编译新的Pattern对象，不能重复使用，效率不高；Pattern是不可变类，可供多个并发线程安全使用；
+
+### Matcher类提供的常用方法
+
+|常用方法|说明|
+|------|------|
+|find()|返回目标字符串中是否包含与Pattern匹配的子串|
+|group()|返回上一次与Pattern匹配的子串|
+|start()|返回上一次与Pattern匹配的子串在目标字符串中的开始位置|
+|end()|返回上一次与Pattern匹配的子串在目标字符串中的结束位置+1|
+|lookingAt()|返回目标字符串前面部分与Pattern是否匹配|
+|matches()|返回整个目标字符串与Pattern是否匹配|
+|reset()|将现有的Matcher对象应用于一个新的字符序列|
+
+#### 如何从大段的字符串中找出电话号码
+
+
+
+
+
+
+
+
+
+
+
