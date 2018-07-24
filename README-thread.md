@@ -20,3 +20,5 @@
 [线程通信](https://github.com/ningbaoqi/Java/blob/master/README-thread10.md)
 ### 线程建议
 [线程建议](https://github.com/ningbaoqi/Java/blob/master/README-thread9.md)
+### 多线程面试
+[多线程面试](https://github.com/ningbaoqi/Java/blob/master/README-thread12.md)
