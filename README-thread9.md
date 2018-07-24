@@ -155,3 +155,49 @@ class TestThread extends Thread {
 }
 ```
 + `并不是严格遵循线程优先级级别来执行的；优先级差别越大，运行机会差别越明显`；线程优先级推荐使用`MIN_PRIORITY（1）、NORM_PRIORITY（5）、MAX_PRIORITY（10）三个级别`，不建议使用其他数字；
+### 线程建议---使用线程异常处理器提升系统可靠性
++ 在Java1.5版本以后在Thread类中增加了`setUncaughtExceptionHandler方法`，`实现了线程异常的捕捉和处理`；
+```
+class Client {
+    public static void main(String[] agrs) {
+
+    }
+}
+
+class TcpServer implements Runnable {
+    public TcpServer(){
+        Thread t = new Thread(this);
+        t.setUncaughtExceptionHandler(new TcpServerExceptionHandler());
+        t.start();
+    }
+
+    @Override
+    public void run() {
+        for (int i = 0; i < 3; i++) {
+            try {
+                Thread.sleep(300);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        throw new RuntimeException();
+    }
+
+    private static class TcpServerExceptionHandler implements Thread.UncaughtExceptionHandler {//异常处理器
+
+        @Override
+        public void uncaughtException(Thread t, Throwable e) {
+            System.out.print("线程：" + t.getName() + "出现异常，自动重启，请分析原因");//记录线程异常信息
+            e.printStackTrace();
+            new TcpServer();//重启线程，保证业务不中断
+        }
+    }
+}
+```
+
+|如果要在实际环境中应用，需要注意如下三个方面|
+|------|
+|共享资源锁定；如果线程异常产生的原因是资源被锁定，自动重启应用只会增加系统的负担，无法提供不间断服务，例如：一个即时通信服务器出现信息不能写入的情况时，即使再怎么重启服务，也无法解决问题，在此情况下最好的办法是停止所有的线程，释放资源|
+|脏数据引起系统逻辑混乱；异常的产生中断了正在执行的业务逻辑，特别是如果正在执行一个原子操作。但如果此时抛出了运行期异常可能会破坏正常的业务逻辑，例如出现用户认证通过了，但签到不成功的情况，在这种情况下重启应用服务器，虽然可以提供服务，但对部分用户则产生了逻辑异常|
+|内存溢出；线程异常了，但由线程创建的对象并不会马上回收，如果再重新启动新线程，在创建一批新对象，特别是加入了场景接管，就非常危险了|
+
