@@ -102,3 +102,40 @@ class F {
 |------|
 |可通过调用方法的上下文来判断类型参数的目标类型|
 |可在方法调用链中，将推断得到的类型参数传递到最后一个方法|
+
+### 类型通配符
+```
+class Test {
+    public static void main(String[] args) {
+        List<String> list;
+        test(list);//报错
+    }
+    public void test(List<Object> objects) {
+
+    }
+}
+```
++ `如果Sub是Main的一个子类或子接口，而G是具有泛型声明的类或接口`，`G<Sub>`并不是`G<Main>`的子类型，一定要注意！！！！！！！！
+#### 使用类型通配符
++ `为了表示各种泛型List的父类，可以使用类型通配符，类型通配符是一个问号？`，将该问号作为类型实参传入List集合，写作`List<?>`（`意思是元素类型未知的List`），这个问号被称为通配符，`它的元素类型可以匹配任意类型`：`带有通配符的list仅表示他是各种泛型List的父类，并不能把元素加入到其中`：
+```
+public void test(List<Object> objects) {
+    List<?> list = new ArrayList<String>();
+    list.add(new String());//报错
+}
+```
+#### 设定类型通配符上限
++ 程序不希望这个`List<?>`是任何泛型List的父类，只希望他代表某个些类泛型List的父类；可以使用如以下的形式；表示所有Shape类及子类的泛型的父类；
+```
+List< ? entends Shape>
+```
++ `类似的，由于程序无法确定这个受限的通配符的具体类型，所以不能把Shape类及其子类的对象加入到这个泛型集合中`；
+#### 设置类型参数的上限
++ `可以在定义类型形参时设置上限，用于表示传给该类型形参的实际类型要么是该上限类型，要么是该上限类的子类`：
+```
+public class Apple <T extends Number>{}
+```
++ `如果程序需要为类型形参设置多个上限（至多一个父类的上限，可以有很多接口上限）`，`表明该类型必须是其父类的子类，并且实现多个上限接口`：`表示T类型必须是Number类的子类或本类，并且实现了 java.io.Serializable接口`：
+```
+public class Apple<T extends Number & java.io.Serializable>{}
+```
