@@ -8,4 +8,5 @@
 [使用jar文件](https://github.com/ningbaoqi/Java/blob/master/README-jar.md)
 ### 内部类
 [内部类](https://github.com/ningbaoqi/Java/blob/master/README-nei.md)
-
+### Java8改进的接口
+[Java8改进的接口](https://github.com/ningbaoqi/Java/blob/master/README-j8.md)
