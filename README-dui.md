@@ -12,3 +12,5 @@
 [Java8改进的接口](https://github.com/ningbaoqi/Java/blob/master/README-j8.md)
 ### Java8新增的Lambda表达式
 [Java8新增的Lambda表达式](https://github.com/ningbaoqi/Java/blob/master/README-j82.md)
+### 面向对象建议
+[面向对象建议](https://github.com/ningbaoqi/Java/blob/master/README-j1.md)
