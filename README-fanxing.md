@@ -203,3 +203,5 @@ class Apple1<T> {
     }
 }
 ```
+### 泛型建议
+[泛型建议](https://github.com/ningbaoqi/Java/blob/master/README-fanxing1.md)
