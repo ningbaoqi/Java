@@ -31,3 +31,6 @@ try{
 |getStackTrace()|返回该异常的跟踪栈信息|
 
 ![image](https://github.com/ningbaoqi/Java/blob/master/gif/pic-2.jpg) 
+
+### 使用finally回收资源
++ 程序在try块里打开了一些物理资源（例如数据库连接、网络连接、和磁盘文件等），这些资源都必须显式回收；异常处理语法结构中只有try块是必须的，也就是或如果没有try块，则不能有后面的catch块和finally块，catch块和finally块都是可选的，但catch和finally块至少出现其中之一，也可以同时出现，finally必须位于所有的catch块之后；在异常处理代码中使用`System.exit(1)`语句来`退出虚拟机`，则`finally块将失去执行的机会`；`其余情况finally块都会得到执行`；`catch块`中抛出异常，将会查找处理该异常的代码块，然后执行`finally代码块`;如果finally之前的代码块中使用了`return`，`finally将在return之前执行`；`finally`虽然是在`return`语句之前调用的，但是`finally`不能给成员变量赋值来改变`return`的返回值；不要在`finally`代码块中使用`return`语句；
