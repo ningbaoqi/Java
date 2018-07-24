@@ -5,3 +5,5 @@
 [List集合](https://github.com/ningbaoqi/Java/blob/master/README-list.md)
 ### Set集合
 [Set集合](https://github.com/ningbaoqi/Java/blob/master/README-set.md)
+### Queue集合
+[Queue集合](https://github.com/ningbaoqi/Java/blob/master/README-queue.md)
