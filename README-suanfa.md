@@ -29,6 +29,29 @@ public class Test{
        }
 }
 ```
-
+#### 直接查找算法（就是遍历数组进行查找，效率很低）
+```
+public class Test{
+       static int search(int[] a , int key){
+              int index = -1;
+              for(int i = 0 ; i < a.length ; i++){
+                     if(a[i] == key){
+                            index = i;
+                            break;
+                     }
+              }
+              return index;
+       }
+       public static void main(String[] args){
+              int[] a = {1 , 23 , 4 , 5 , 6 , 7, 8 , 9};
+              int index = search(a , 5);
+              if(index == -1){
+                     System.out.println("没找到");
+              }else{
+                     System.out.println("找到了；当前索引为：" + index);
+              }
+       }
+}
+```
 
 
