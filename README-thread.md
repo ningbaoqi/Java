@@ -14,3 +14,5 @@
 [线程池](https://github.com/ningbaoqi/Java/blob/master/README-thread7.md)
 ### 线程相关类
 [线程相关类](https://github.com/ningbaoqi/Java/blob/master/README-thread8.md)
+### 线程建议
+[线程建议](https://github.com/ningbaoqi/Java/blob/master/README-thread9.md)
