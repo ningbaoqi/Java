@@ -692,3 +692,46 @@ public class Common {
 + `建立一个线程池，而且线程数量是没有限制的（当然，不能超过Integer的最大值），新增一个任务即有一个线程处理，或者复用之前空闲的线程，或者新启动一个线程，但是一旦一个线程在60s内一直是处于等待状态时（也就是1分钟没工作可做），则会被终止`；
 ##### newFixedThreadPool：固定线程数量的线程池
 + `在初始化时已经决定了线程的最大数量，若任务添加的能力超出了线程处理能力，则建立阻塞队列容纳多余的任务；有时候这三个线程池不能满足要求，此时则可以直接操作ThreadPoolExecutor来实现复杂的多线程运算`；
+
+### 线程建议--volatile不能保证数据同步
+![image](https://github.com/ningbaoqi/Java/blob/master/gif/pic-10.jpg) 
+![image](https://github.com/ningbaoqi/Java/blob/master/gif/pic-11.jpg) 
++ `线程在初始化时从主内存中加载所需的变量值到工作内存中，然后在线程运行时，如果是读取，则直接从工作内存中读取，若是写入则先写到工作内存中，之后再刷新到主存中，这是JVM的一个简单内存模型，但是这样的结构在多线程的情况下有可能会出现问题`，比如：A线程修改变量的值，也刷新到了主存中，但B、C线程在此时间读取的还是本线程的工作内存，也就是说他们读取的不是最新鲜的值，此时就出现了不同线程持有的公共资源不同的情况；对于此类问题有很多解决办法，如使用synchronized同步代码块，或者使用lock锁来解决该问题，不过，Java可以使用volatile更简单的解决这类问题，比如在一个变量前加上`volatile`关键字，`可以确保每个线程对本地变量的访问和修改都是直接与主内存交互的，而不是与本线程的工作内存交互的，保证每个线程都能获得最新鲜的变量值`；
+```
+public class Common {
+    public static void main(String[] args) throws ExecutionException, InterruptedException {
+        int value = 1000;//理想值，并作为最大循环次数
+        int loops = 0;//循环次数，防止出现无限循环造成死机的情况
+        ThreadGroup threadGroup = Thread.currentThread().getThreadGroup();//主线程组，用于估计活动线程数
+        while (loops++ < value) {
+            UnSafeThread unSafeThread = new UnSafeThread();
+            for (int i = 0; i < value; i++) {
+                new Thread(unSafeThread).start();
+            }
+            do {
+                Thread.sleep(12);
+            } while (threadGroup.activeCount() != 1);
+            if (unSafeThread.getCount() != value) {//检查实际值与理论值是否一致
+                System.out.print("循环到：" + loops + "次，出现线程不安全情况" + unSafeThread.getCount());
+                System.exit(0);
+            }
+        }
+    }
+}
+
+class UnSafeThread implements Runnable {
+    private volatile int count = 0;//共享资源
+    @Override
+    public void run() {
+        for (int i = 0; i < 1000; i++) {//增加CPU的繁忙程度，不用关心其逻辑含义
+            Math.hypot(Math.pow(92456789, i), Math.cos(i));
+        }
+        count++;
+    }
+
+    public int getCount() {
+        return count;
+    }
+}
+```
++ `volatile关键字并不能确保线程安全，它只是能够保证当前线程需要该变量的值时能够获得最新的值，而不能保证多个线程修改的安全性`；
