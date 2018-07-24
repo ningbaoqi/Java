@@ -123,13 +123,13 @@ boolean b = Pattern.matches("a*b" , "aaaaaaab");
 
 #### 如何从大段的字符串中找出电话号码
 
+![image](https://github.com/ningbaoqi/Java/blob/master/gif/pic-70.jpg)
 
++ find()方法还可以传入一个int类型的参数，带int类型的find()方法将从该int索引处向下搜索；
 
+![image](https://github.com/ningbaoqi/Java/blob/master/gif/pic-71.jpg)
 
++ matches()方法要求整个字符串和Pattern完全匹配时才返回true，而lookingAt()只要字符串以Pattern开头就会返回true，reset()方法可将现有的Matcher对象应用于新的字符序列；
 
-
-
-
-
-
-
+![image](https://github.com/ningbaoqi/Java/blob/master/gif/pic-72.jpg)
+![image](https://github.com/ningbaoqi/Java/blob/master/gif/pic-73.jpg)
