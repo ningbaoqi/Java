@@ -310,3 +310,56 @@ public class Common {
 ```
 + `CyclicBarrier关卡可以让所有线程全部处于等待状态（阻塞），然后在满足条件的情况下继续执行`；CyclicBarrier可以用在系统的性能测试中，例如编写一个核心算法，但不能确定其可靠性和效率如何，我们就可以让N个线程汇集到测试原点上，然后一声令下，所有的线程都引用该算法，即可观察出算法是否有缺陷；
 
+### 线程建议--使用CountDownLatch协调子线程
+```
+public class Common {
+    public static void main(String[] args) throws ExecutionException, InterruptedException {
+        int num = 10;//参加赛跑人数
+        CountDownLatch begin = new CountDownLatch(1);//发令枪只响一次
+        CountDownLatch end = new CountDownLatch(num);//参与跑步有多个
+        ExecutorService executorService = Executors.newFixedThreadPool(num);//每个跑步者一个跑道
+        List<Future<Integer>> futures = new ArrayList<>();//记录比赛结果
+        for (int i = 0; i < num; i++) {//跑步者就位，所有线程处于等待状态
+            futures.add(executorService.submit(new Runner(begin, end)));
+        }
+        begin.countDown();//发令枪响，跑步者开始跑步
+        end.await();//等待所有跑步者开始跑步
+        int count = 0;
+        for (Future<Integer> future : futures) {
+            count += future.get();
+        }
+        System.out.print("平均分数:" + count / num);
+    }
+
+    static class Runner implements Callable<Integer> {
+        private CountDownLatch begin;//开始信号
+        private CountDownLatch end;//结束信号
+
+        public Runner(CountDownLatch _begin, CountDownLatch _end) {
+            this.begin = _begin;
+            this.end = _end;
+        }
+        @Override
+        public Integer call() throws Exception {
+            int score = new Random().nextInt(25);
+            begin.await();//等待发令响起
+            TimeUnit.MILLISECONDS.sleep(score);//跑步中...
+            end.countDown();//跑步者已经跑完全程
+            return score;
+        }
+    }
+}
+```
+
+|程序执行逻辑|
+|------|
+|10个线程都开始运行，执行到begin.await()后线程阻塞，等待begin的计时器为0|
+|主线程调用begin的countDown方法，使begin的计时器为0|
+|10个线程继续运行|
+|主线程继续运行下一个语句，end的计时器不为0，主线程等待|
+|每个线程运行结束时把end的计时器减一，标志着本线程运行完毕|
+|10个线程全部结束，end计时器为0|
+|主线程继续执行，打印出成绩平均值|
+
++ `CountDownLatch的作用是控制一个计数器，每个线程在运行完毕后会执行countDown，表示自己运行结束，这对于多个子任务的计算特别有效，如：一个异步任务需要拆分成10个子任务执行，主任务必须要知道子任务是否完成，所有子任务完成后才能进行合并计算，从而保证了一个主任务的逻辑正确性`；
+
