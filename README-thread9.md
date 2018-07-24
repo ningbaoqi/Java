@@ -201,3 +201,32 @@ class TcpServer implements Runnable {
 |脏数据引起系统逻辑混乱；异常的产生中断了正在执行的业务逻辑，特别是如果正在执行一个原子操作。但如果此时抛出了运行期异常可能会破坏正常的业务逻辑，例如出现用户认证通过了，但签到不成功的情况，在这种情况下重启应用服务器，虽然可以提供服务，但对部分用户则产生了逻辑异常|
 |内存溢出；线程异常了，但由线程创建的对象并不会马上回收，如果再重新启动新线程，在创建一批新对象，特别是加入了场景接管，就非常危险了|
 
+### 线程建议---异步运算考虑使用Callable接口
++ 从1.5版本开始引入了一个新的接口`Callable`，它类似于Runable接口，实现它就可以实现多线程任务；`实现Callable接口的类，只是表明它是一个可调用的任务，并不表示它具有多线程运算能力，还是需要执行器来执行的`；
+```
+class Client {
+    public static void main(String[] args) throws InterruptedException {
+        ExecutorService executorService = Executors.newSingleThreadExecutor();//生成一个单线程的异步执行器
+        Future<Integer> future = executorService.submit(new TaxCalculator(100));//线程执行后的期望值
+        while (!future.isDone()) {
+            TimeUnit.MILLISECONDS.sleep(200);
+        }
+        executorService.shutdown();
+    }
+}
+
+class TaxCalculator implements Callable<Integer> {
+    private int seedMoney;
+
+    public TaxCalculator(int _seedMoney) {
+        this.seedMoney = _seedMoney;
+    }
+
+    @Override
+    public Integer call() throws Exception {
+        TimeUnit.MILLISECONDS.sleep(10000);
+        return seedMoney / 10;
+    }
+}
+```
++ Exexutors是一个静态工具类，提供了异步执行器的创建能力，如但线程执行器newSingleThreadExecutor、固定线程数量的执行器newFixedThreadPool等，一般它是异步计算的入口类，Future关注的是线程执行后的结果，比如有没有完成运算，执行结果是多少等；异步计算的好处是：尽可能多的占用系统资源，提供快速运算；可以监控线程执行的情况，比如是否执行完毕，是否有返回值，是否有异常等；可以为用户提供良好的支持；
