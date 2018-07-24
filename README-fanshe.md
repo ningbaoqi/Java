@@ -8,3 +8,5 @@
 [使用反射生成JDK动态代理](https://github.com/ningbaoqi/Java/blob/master/README-f3.md)
 ### 反射和泛型
 [反射和泛型](https://github.com/ningbaoqi/Java/blob/master/README-f4.md)
+### 类的加载、连接和初始化
+[类的加载、连接和初始化](https://github.com/ningbaoqi/Java/blob/master/README-f5.md)
