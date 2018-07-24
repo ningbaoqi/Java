@@ -10,3 +10,5 @@
 [集合](https://github.com/ningbaoqi/Java/blob/master/README-co.md)
 ### 类加载机制与反射
 [类加载机制与反射](https://github.com/ningbaoqi/Java/blob/master/README-fanshe.md)
+### 性能与注意
+[性能与注意](https://github.com/ningbaoqi/Java/blob/master/README-xing.md)
