@@ -137,4 +137,25 @@ public class Test{
        }
 }
 ```
-
+#### 冒泡排序算法
+```
+public class Test{
+       public static void main(String[] args){
+              int[] a = {4 , 3 , 5 , 7 , 9 , 1 , 10 , 2 , 6 , 8};
+              int temp;
+              int size = a.length;
+              for(int i = 0 ; i < size - 1 ; i++){
+                     for(int j = i + 1; j < size ; j++ ){
+                            if(a[j] < a[i]){
+                                   temp = a[j];
+                                   a[j] = a[i];
+                                   a[i] = temp;
+                            }
+                     }
+              }
+              for(int i : a){
+                     System.out.println(i);
+              }
+       }
+}
+```
