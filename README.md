@@ -12,5 +12,7 @@
 [类加载机制与反射](https://github.com/ningbaoqi/Java/blob/master/README-fanshe.md)
 ### Annotation注解
 [Annotation注解](https://github.com/ningbaoqi/Java/blob/master/README-anno.md)
+### 多线程
+[多线程](https://github.com/ningbaoqi/Java/blob/master/README-thread.md)
 ### 性能与注意
 [性能与注意](https://github.com/ningbaoqi/Java/blob/master/README-xing.md)
