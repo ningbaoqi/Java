@@ -21,6 +21,25 @@
 |String toString(type[] a )：|该方法将一个数组转换成一个字符串，该方法按顺序把多个数组元素连在一起，多个数组元素使用英文逗号和空格隔开；|
 
 #### Arrays例子
+![image](https://github.com/ningbaoqi/Java/blob/master/gif/pic-3.jpg) 
+
+#### Java8增强的工具类Arrays的并行函数
++ Java8增强了Arrays类的功能，为Arrays类增加了一些工具方法，这些工具方法可以充分利用多CPU并行的能力来提高设值、排序的功能；
+
+|方法|说明|
+|------|------|
+|void parallelPrefix(xxx[] array,XxxBinaryOperator op)|该方法使用op参数指定的计算公式计算得到的结果作为新的元素，op计算公式包括left、right两个行参，其中left代表数组中前一个索引处的元素，right代表数组中当前索引处的元素，当计算第一个新数组元素时，left的值默认为1；|
+|void parallelPrefix(xxx[] array, int fromindex,int toindex,XxxBinaryOperator op)|该方法与上一个方法类似，区别是该方法仅重新计算fromindex到toindex索引的元素；|
+|void setAll(xxx[] array, IntToXxxFunction generator)|该方法使用指定的生成器generator为所有数组元素设置值，该生成器控制数组元素的值的生成算法；|
+|void parallelSort(xxx[] array,  IntToXxxFunction generator)|该方法的功能与上一个方法的功能相同，只是该方法增加了并行功能，可以利用多CPU并行来提高性能；|
+|void parallelSort(xxx[] a)|该方法的功能与Arrays类的sort方法相似，只是该方法增加了并行功能，可以利用多CPU并行来提高性能；|
+|void parallelSort(xxx[] a，int fromindex,int toindex)|与上一个方法相似，区别是该方法仅仅在fromindex和toindex之间的元素进行排序；|
+|Spliterator.OfXxx spliterator(xxx[] array)|将该数组的所有元素转换成对应的Spliterator对象；|
+|Spliterator.OfXxx spliterator(xxx[] array，int startInclusive, int endExclusive)|该方法作用与上一方法相似，区别是该方法仅转换区间的元素；|
+|XxxStream stream(xxx[] array)|该方法将数组转换为stream，Stream是Java8新增的流式编程的API；|
+|XxxStream stream(xxx[] array，int from , int to)|该方法与上一方法相似，区别在于值转换区间内的元素；|
+
++ 所有以`parallel`开头的方法都表示该方法可利用CPU并行的能力来提高性能，上面的`Xxx`指的是不同的类型；
 
 
 ### 算法
