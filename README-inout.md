@@ -10,3 +10,5 @@
 [Java虚拟机读写其他进程的数据](https://github.com/ningbaoqi/Java/blob/master/README-file4.md)
 ### RandomAcessFile类
 [RandomAcessFile类](https://github.com/ningbaoqi/Java/blob/master/README-file5.md)
+### 对象序列化
+[对象序列化](https://github.com/ningbaoqi/Java/blob/master/README-file6.md)
