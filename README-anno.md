@@ -4,3 +4,5 @@
 [编译时处理Annotation及注意事项](https://github.com/ningbaoqi/Java/blob/master/README-anno2.md)
 ### 自定义Annotation
 [自定义Annotation](https://github.com/ningbaoqi/Java/blob/master/README-anno3.md)
+### Android中的注解
+[Android中的注解](https://github.com/ningbaoqi/Java/blob/master/README-anno4.md)
