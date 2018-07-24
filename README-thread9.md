@@ -629,3 +629,66 @@ class Foo {
 #### Lock是代码级的，synchronized是JVM级的
 + `Lock是通过编码实现的，sychronized是在运行期间由JVM解释的`，相对来说synchronized的优化可能性更高，毕竟是在最核心部分支持的，Lock的优化则需要用户自行考虑；灵活、强大则选择Lock，快捷、安全则选择synchronized；两种不同的锁机制，根据不同的情况来选择；
 
+### 线程建议--适时选择不同的线程池来实现
++ java的线程池实现从最根本上来说只有两个：`ThreadPoolExecutor类和ScheduledThreadPoolExecutor类`，这两个类还是父子关系，但是Java为了简化并行计算，还提供了一个`Executor的静态类`，`它可以直接生成多种不同的线程池执行器`，`比如单线程执行器、带缓冲功能的执行器等`，但归根结底还是使ThreadPoolExecutor类或ScheduledThreadPoolExecutor类的封装类；ThreadPoolExecutor类，其中它复杂的构造函数可以很好解释该线程池的作用；
+```
+/**
+ * corePoolSize:线程池的基本大小
+ * maximumPoolSize：线程池的最大所能容量的线程大小，如果队列满了，线程数小于最大线程数，将会创建新的线程执行任务，如果线程池已经有最大线程数了将不会创建新的线程
+ * keepAliveTime：线程存活时间
+ * unit：时间的单位
+ * workQueue：阻塞队列
+ * threadFactory：创建线程的工厂
+ * handler：当队列和线程池满了的时候，就处于饱和状态，一种饱和策略
+ */
+
+class ThreadPoolExecutor extends AbstractExecutorService {
+    public ThreadPoolExecutor(int corePoolSize, int maximumPoolSize, long keepAliveTime, TimeUnit unit, BlockingQueue<Runnable> workQueue, ThreadFactory threadFactory, RejectedExecutionHandler handler) {
+        if (corePoolSize < 0 || maximumPoolSize <= 0 || maximumPoolSize < corePoolSize || keepAliveTime < 0) {//检验输入条件
+            throw new IllegalArgumentException();
+        }
+        if (workQueue == null || threadFactory == null || handler == null) {//检验运行环境
+            throw new NullPointerException();
+        }
+        this.corePoolSize = corePoolSize;
+        this.maximumPoolSize = maximumPoolSize;
+        this.workQueue = workQueue;
+        this.keepAliveTime = keepAliveTime;
+        this.threadFactory = threadFactory;
+        this.handler = handler;
+    }
+}
+```
+
+|参数|含义|
+|------|------|
+|corePoolSize|最小线程数，线程池启动后，再池中保持线程的最小数量，需要说明的是线程数量是逐步到达corePoolSize值的，例如corePoolSize被设置为10，而任务数量为5，则线程池中最多会启动5个线程，而不是一次性的启动10个线程|
+|maximumPoolSize|最大线程数量，这是池中能够容纳的最大线程数量，如果超出，则使用RejectedExecutionHandler拒绝策略处理|
+|keepAliveTime|线程最大生命期，这里的生命期有两个约束条件，一是该参数针对的是超过corePoolSize数量的线程，二是处于非运行状态的线程，如果corePoolSize为10，maximumPoolSize为20，此时线程池中有15个线程在运行，一段时间后，其中有3个线程处于等待状态的时间超过了keepAliveTime指定的时间，则结束这3个线程，此时线程池中则还有12个线程正在运行|
+|unit|时间单位，这是keepAliveTime的时间单位，可以是纳秒，毫秒，秒，分钟等选项|
+|workQueue|任务队列，当线程池中的线程都处于运行状态，而此时任务数量继续增加，则需要一个容器来容纳这些任务，这就是任务队列|
+|threadFactory|线程工厂，定义如何启动一个线程，可以设置线程名称，并且可以确认是否是后台线程等|
+|handler|拒绝任务处理器，由于超出线程数量和队列容量而对继续增加的任务进行处理的程序|
+
+#### Executor提供的几个创建线程池的简便方法
+##### newSingleThreadExecutor：单线程池
++ `它就是一个池中只有一个线程在运行，该线程永不超时，而且由于是一个线程，当有多个任务需要处理时，会将他们放置到一个无界阻塞队列中逐个处理`；
+```
+public class Common {
+    public static void main(String[] args) throws ExecutionException, InterruptedException {
+        ExecutorService es = Executors.newSingleThreadExecutor();//创建单线程执行器
+        Future<String> future = es.submit(new Callable<String>() {
+            @Override
+            public String call() throws Exception {
+                return "";
+            }
+        });
+        System.out.print("返回值:" + future.get());//获取任务执行后的返回值
+        es.shutdown();//关闭执行器
+    }
+}
+```
+##### newCachedThreadPool：缓冲功能的线程池
++ `建立一个线程池，而且线程数量是没有限制的（当然，不能超过Integer的最大值），新增一个任务即有一个线程处理，或者复用之前空闲的线程，或者新启动一个线程，但是一旦一个线程在60s内一直是处于等待状态时（也就是1分钟没工作可做），则会被终止`；
+##### newFixedThreadPool：固定线程数量的线程池
++ `在初始化时已经决定了线程的最大数量，若任务添加的能力超出了线程处理能力，则建立阻塞队列容纳多余的任务；有时候这三个线程池不能满足要求，此时则可以直接操作ThreadPoolExecutor来实现复杂的多线程运算`；
