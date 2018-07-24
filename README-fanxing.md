@@ -139,3 +139,67 @@ public class Apple <T extends Number>{}
 ```
 public class Apple<T extends Number & java.io.Serializable>{}
 ```
+### 深入泛型
++ `所谓泛型，就是允许在定义类，接口，方法时使用类型形参，这个类型形参将在声明变量、创建对象、调用方法时动态的指定（即传入实际 的类型参数，也可称为类型实参）`；
+#### 定义泛型接口、类
++ 泛型的实质：`允许在定义接口、类时声明类型形参，类型形参在整个接口、类体内可当成类型使用，几乎所有可使用的普通类型的地方都可以使用这种类型形参`；`可以在任何类，接口增加泛型声明（并不是只有集合类才可以使用泛型声明，虽然集合类是泛型的重要使用场所）`；
+```
+public class Common {
+    public static void main(String[] args) {
+        Apple<String> apple = new Apple<>("pingguo");
+        apple.getInfo();
+        Apple<Double> apple1 = new Apple<>(45.5);
+        apple1.getInfo();
+    }
+}
+class Apple<T>{
+    private T info;
+
+    public Apple() {
+
+    }
+
+    public Apple(T info) {
+        this.info = info;
+    }
+
+    public void setInfo(T info) {
+        this.info = info;
+    }
+
+    public T getInfo() {
+        return this.info;
+    }
+}
+```
++ `当创建带泛型声明的自定义类，为该类定义构造器时，构造器名还是原来的类名，不要增加泛型声明，调用该构造器时却可以使用泛型形式`；
+#### 从泛型类派生子类
++ `当使用这些泛型类或接口作为父类时，不能再包含类形参数了：如下面的代码是错误的`：
+```
+class A3 extends Apple<T> {//报错
+    
+}
+```
++ `如果想从Apple类派生子类`，可以改写为：如果从`Apple<String>`类派生子类，`则在Apple类中所有使用T类型参数的地方都被替换成了String类型，即他的子类将会继承到的方法T都变为了String方法`，如果子类需要重写父类的方法需要注意这一点；
+```
+class A2 extends Apple<String> {
+    
+}
+```
++ `如果使用Apple类时没有传入实际的类型参数，java编辑器可能发出警告，使用未经检查或不安全的操作，但是不会报错，此时，系统会把Apple<T>类中的T形参当成Object类型来处理`：
+```
+class A1 extends Apple {
+    
+}
+```
+#### 并不存在泛型类
++ `无论泛型类的T参数使用的是什么，其实都是一个类，使用对象.getClass()方法就可以判断，只不过是使用T是加了一个限制；因此在静态方法、静态初始化块、静态变量的声明和初始化中不允许使用类型形参T`；
+```
+class Apple1<T> {
+    static T info;//报错
+
+    public static void bar(T t) {//报错
+        
+    }
+}
+```
