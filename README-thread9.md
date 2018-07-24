@@ -230,3 +230,31 @@ class TaxCalculator implements Callable<Integer> {
 }
 ```
 + Exexutors是一个静态工具类，提供了异步执行器的创建能力，如但线程执行器newSingleThreadExecutor、固定线程数量的执行器newFixedThreadPool等，一般它是异步计算的入口类，Future关注的是线程执行后的结果，比如有没有完成运算，执行结果是多少等；异步计算的好处是：尽可能多的占用系统资源，提供快速运算；可以监控线程执行的情况，比如是否执行完毕，是否有返回值，是否有异常等；可以为用户提供良好的支持；
+
+### 线程建议---优先选择线程池
++ 线程不能从结束状态直接转变为可运行状态，在容器（系统）启动时，创建足够多的线程，当容器（或系统）需要时直接从线程池中获取线程，运算出结果，再把线程返回到线程池中，`ExecutorService就是实现了线程池的执行器`；
+```
+class Client {
+    public static void main(String[] args) throws InterruptedException {
+        ExecutorService service = Executors.newFixedThreadPool(2);//2个线程的线程池
+        for (int i = 0; i < 4; i++) {//多次执行线程体
+            service.submit(new Runnable() {
+                @Override
+                public void run() {
+                    System.out.print(Thread.currentThread().getName());
+                }
+            });
+        }
+        service.shutdown();//关闭执行器
+    }
+}
+```
+
+|线程池的实现涉及的名词|
+|------|
+|工作线程（Worker）；线程池中的线程，只有两个状态：可运行状态和等待状态，在没有任务时他们处于等待状态，运行时可以循环的执行任务|
+|任务接口（Task）；每个任务必须实现的接口，以供工作线程调度器调度，它主要规定了任务的入口，任务执行完的场景处理，任务的执行状态等，这里有两种类型的任务：具有返回值（或异常）的Callable接口任务和无返回值并兼容旧版本的Runnable接口任务|
+|任务队列（Work Queue）；也叫做工作队列，用于存放等待处理的任务，一般是BlockingQueue的实现类，用来实现任务的排队处理|
+
++ 线程池的创建过程：创建一个阻塞队列以容纳任务，在第一次执行任务时创建足够多的线程（不超过许可线程数），并处理任务，之后每个工作线程自行从任务队列中获取任务，直到任务队列中的任务数量是0为止，此时，线程将处于等待状态，一旦有任务再加入到队列中，即唤醒工作线程进行处理，实现线程的可复用性；使用线程池减少的是线程的创建和销毁时间，这对于多线程应用来说非常有帮助，如果不采用线程池技术，每次请求都会重新创建一个线程，这会导致系统的性能负荷加大，响应效率下降，降低了系统的友好性；
+
