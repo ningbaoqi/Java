@@ -272,3 +272,41 @@ public class Common {
 ```
 + `阻塞队列的容量是固定的，非阻塞队列则是变长的，阻塞队列可以在声明时指定队列的容量，若指定了容量，则元素的数量不可超过该容量，若不指定，队列的容量为Integer的最大值；阻塞队列和非阻塞队列有此区别的原因是：阻塞队列是为了容纳（或排序）多线程任务而存在的，其服务的对象是多线程应用，而非阻塞队列容纳的则是普通的数据元素`；
 
+### 线程建议---CyclicBarrier让多线程齐步走
++ 两个线程独立运行，在没有线程间通信的情况下，如何解决两个线程汇集在同一原点的问题；`Java提供了CyclicBarrier（关卡，或者栅栏）工具类实现`；
+```
+public class Common {
+    public static void main(String[] args) {
+        CyclicBarrier cyclicBarrier = new CyclicBarrier(2, new Runnable() {//设置汇集数量，以及汇集完成后的任务
+            @Override
+            public void run() {
+                System.out.print("隧道已经打通");
+            }
+        });
+        new Thread(new Worker(cyclicBarrier), "工人1").start();//工人1挖隧道
+        new Thread(new Worker(cyclicBarrier), "工人2").start();//工人2挖隧道
+    }
+
+    static class Worker implements Runnable {
+        private CyclicBarrier cyclicBarrier;
+
+        public Worker(CyclicBarrier cyclicBarrier) {
+            this.cyclicBarrier = cyclicBarrier;
+        }
+
+        @Override
+        public void run() {
+            try {
+                Thread.sleep(new Random().nextInt(1000));
+                cyclicBarrier.await();//到达汇合点
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (BrokenBarrierException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
+```
++ `CyclicBarrier关卡可以让所有线程全部处于等待状态（阻塞），然后在满足条件的情况下继续执行`；CyclicBarrier可以用在系统的性能测试中，例如编写一个核心算法，但不能确定其可靠性和效率如何，我们就可以让N个线程汇集到测试原点上，然后一声令下，所有的线程都引用该算法，即可观察出算法是否有缺陷；
+
