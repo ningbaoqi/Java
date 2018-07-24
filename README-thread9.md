@@ -507,3 +507,125 @@ public void b1(){
 ```
 + 上面的代码中使用`tryLock实现了自旋锁，它跟互斥锁一样，如果一个执行单元要想访问被自旋锁保护的共享资源，则必须先得到锁，在访问完共享资源后，也必须释放锁，如果在获取自旋锁时，没有任何执行单元保持该锁，那么将立即得到锁，如果在获取自旋锁时锁已经有保持者，那么获取锁操作将自旋在那里，直到该自旋锁的保持者释放了锁为止`；
 
+### 线程建议--Lock和sychronized是不一样的
++ 使用`显式锁（Lock类）`和`内部类（sychronized关键字）`的区别；
+```
+public class Common {
+    public static void main(String[] args) throws ExecutionException, InterruptedException {
+        runTask(TaskWithLock.class);//运行显示锁任务
+
+        runTask(TaskWithSync.class);//运行内部锁任务
+    }
+    public static void runTask(Class<? extends Runnable> clz) throws Exception {
+        ExecutorService executorService = Executors.newCachedThreadPool();
+        System.out.print("************开始执行" + clz.getSimpleName() + "任务****");
+        for (int i = 0; i < 3; i++) {
+            executorService.submit(clz.newInstance());
+        }
+        TimeUnit.SECONDS.sleep(10);//等待足够长的时间，然后关闭执行器
+        System.out.print("--------" + clz.getSimpleName() + "任务执行完毕---------");
+        executorService.shutdown();//关闭执行器
+    }
+}
+
+class Task {
+    @SuppressLint("WrongConstant")
+    public void doSomething() {
+        try {
+            Thread.sleep(2000);//每个线程等待2秒钟，注意将此时的线程转换为WARNING状态
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        StringBuffer sb = new StringBuffer();
+        sb.append("线程名字" + Thread.currentThread().getName());
+        sb.append(",执行时间" + Calendar.getInstance().get(13) + "s");
+        System.out.print(sb);
+    }
+}
+
+class TaskWithLock extends Task implements Runnable {//显示锁任务，显示锁的锁定和释放必须要在一个try...finally块中，这是为了保证即使出现运行时异常也能正常释放锁，保证其他线程能够顺利执行
+    private final Lock lock = new ReentrantLock();//声明显示锁
+    @Override
+    public void run() {
+        try {
+            lock.lock();//开始锁定
+            doSomething();
+        } catch (Exception e) {
+
+        }finally {
+            lock.unlock();//释放锁
+        }
+    }
+}
+
+class TaskWithSync extends Task implements Runnable {
+
+    @Override
+    public void run() {
+        synchronized ("A") {//内部锁
+            doSomething();
+        }
+    }
+}
+```
++ `使用显式锁输出是同时的，没有出现互斥的作用，是因为显式锁是对象级别的锁，而内部锁是类级别的锁，也就是说Lock锁是跟对象的，sychronized锁是跟随类的，更简单的说把Lock定义为多线程类的私有属性是起不到资源互斥作用的，除非把Lock定义为所有线程的共享变量`；
+```
+public static void main(String[] args) throws ExecutionException, InterruptedException {
+    final Lock lock = new ReentrantLock();//多线程共享锁
+    for (int i = 0; i < 3; i++) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                lock.lock();
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }finally {
+                    lock.unlock();
+                }
+            }
+        }).start();
+    }
+}
+```
++ `这样就可以产生互斥的效果了。因为这个Lock是三个线程共享的，这样一个线程在执行时，其他线程就处于等待状态`，注意；这里三个线程运行的实例对象是同一个类（都是Client$1类的实例）；
+
+#### 显式锁和内部锁的其他区别
+##### Lock支持更细粒度的锁控制
++ `假如读写锁分离，写操作时不允许有读写操作存在，而读操作时读写可以并发执行，这一点内部锁很难实现`；
+```
+class Foo {
+    private final ReentrantReadWriteLock reentrantReadWriteLock = new ReentrantReadWriteLock();//可重入的读写锁
+    private final Lock r = reentrantReadWriteLock.readLock();//读锁
+    private final Lock w = reentrantReadWriteLock.writeLock();//写锁
+    public void read() {//读操作，可并发操作
+        try {
+            r.lock();
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }finally {
+            r.unlock();
+        }
+    }
+
+    public void write(Object _obj) {//写操作，同时只允许一个写操作
+        try {
+            w.lock();
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }finally {
+            w.unlock();
+        }
+    }
+}
+```
+##### Lock是无阻塞锁，synchronized是阻塞锁
++ `当线程A持有锁时，线程B也期望获得锁，此时，如果程序中使用的是显式锁，则B线程为等待状态（在通常的描述中，也认为该线程被阻塞了），若使用的是内部锁则为阻塞状态`；
+##### Lock可实现公平锁，sychronized只能是非公平锁
++ 当一个线程A持有锁，而线程B、C处于阻塞（或等待）状态时，若线程A释放锁，JVM将从线程B、C中随即选择一个线程持有锁并使其获得执行权，这叫非公平锁（因为他抛弃了先来后到的顺序）；若JVM选择了等待时间最长的一个线程持有锁，则为公平锁（保证每个线程的等待时间均衡），需要注意的是，即使是公平锁，JVM也无法准确做到“公平”，在程序中不能以此作为精确计算；显式锁默认情况下是非公平锁，但可以在构造器中加入参数true来声明公平锁，但是内部锁是非公平锁，它不能实现公平锁；
+#### Lock是代码级的，synchronized是JVM级的
++ `Lock是通过编码实现的，sychronized是在运行期间由JVM解释的`，相对来说synchronized的优化可能性更高，毕竟是在最核心部分支持的，Lock的优化则需要用户自行考虑；灵活、强大则选择Lock，快捷、安全则选择synchronized；两种不同的锁机制，根据不同的情况来选择；
+
