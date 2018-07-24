@@ -10,3 +10,5 @@
 [反射和泛型](https://github.com/ningbaoqi/Java/blob/master/README-f4.md)
 ### 类的加载、连接和初始化
 [类的加载、连接和初始化](https://github.com/ningbaoqi/Java/blob/master/README-f5.md)
+### Java中的堆与栈
+[Java中的堆与栈](https://github.com/ningbaoqi/Java/blob/master/README-f6.md)
