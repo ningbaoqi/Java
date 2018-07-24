@@ -13,3 +13,5 @@
 [Collection和Iterator接口](https://github.com/ningbaoqi/Java/blob/master/README-inter.md)
 ### 操作集合的工具类：Collections
 [操作集合的工具类：Collections](https://github.com/ningbaoqi/Java/blob/master/README-Collections.md)
+### Java8增强的Map集合
+[Java8增强的Map集合](https://github.com/ningbaoqi/Java/blob/master/README-map.md)
