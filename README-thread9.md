@@ -363,3 +363,147 @@ public class Common {
 
 + `CountDownLatch的作用是控制一个计数器，每个线程在运行完毕后会执行countDown，表示自己运行结束，这对于多个子任务的计算特别有效，如：一个异步任务需要拆分成10个子任务执行，主任务必须要知道子任务是否完成，所有子任务完成后才能进行合并计算，从而保证了一个主任务的逻辑正确性`；
 
+### 线程建议--预防线程死锁
+```
+
+public class Common {
+    public static void main(String[] args) throws ExecutionException, InterruptedException {
+        new Thread(new Foo()).start();
+    }
+}
+
+class Foo implements Runnable {
+
+    @Override
+    public void run() {
+        fun(10);
+    }
+
+    public synchronized void fun(int i) {
+        if (--i > 0) {
+            for (int j = 0; j < i; j++) {
+                System.out.print("*");
+            }
+            System.out.println(i);
+            fun(i);
+        }
+    }
+}
+
+```
++  `不会产生死锁，因为在运行时当前线程获得了foo对象的锁（synchronized虽然是标注在方法上的，但实际作用的是整个对象），也就是该线程持有了foo对象的锁`。所以它可以重复多次调用fun()方法，也就是递归，不会产生死锁；
+```
+
+class Foo implements Runnable{
+
+       public void run(){
+
+              method1();
+
+       }
+
+       public synchronized void method1(){
+
+              method2();
+
+       }
+
+       public synchronized void method2(){
+
+              //do something
+
+       }
+
+}
+
+```
+
++ `方法method1是synchronized修饰的，方法method2也是synchronized修饰的，method1调用method2是没有任何问题的，因为是同一个线程持有对象锁，在一个线程内多个synchronized方法调用完全是可行的，这种情况不会产生死锁`；
+
+##### 产生死锁的场景
+
+```
+public class Common {
+    public static void main(String[] args) throws ExecutionException, InterruptedException {
+        final A a = new A();
+        final B b = new B();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                a.a(b);
+            }
+        },"线程A").start();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                b.b1(a);
+            }
+        },"线程B").start();
+    }
+
+    static class A {
+        public synchronized void a(B b) {
+            String name = Thread.currentThread().getName();
+            System.out.print(name + " 进入A.a方法");
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            System.out.print(name + "试图访问B.b2方法");
+            b.b2();
+        }
+
+        public synchronized void a2() {
+            System.out.print("进入A.a2方法");
+        }
+    }
+
+    static class B {
+        public synchronized void b1(A a) {
+            String name = Thread.currentThread().getName();
+            System.out.print(name + " 进入B.b1方法");
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            System.out.print(name + " 进入A.a2方法");
+            a.a2();
+        }
+
+        public synchronized void b2() {
+            System.out.print(" 进入b.B2方法");
+        }
+    }
+}
+```
+
+|达到线程死锁需要的四个条件，只有满足了这些条件才可能产生线程死锁|
+|------|
+|互斥条件；一个资源每次只能被一个线程使用|
+|资源独占条件；一个线程因请求资源而阻塞时，对已获得的资源保持不放|
+|不剥夺条件；线程已获得的资源在未使用完之前，不能强制剥夺|
+|循环等待条件；若干线程之间形成一种头尾相接的循环等待资源关系|
+
+#### 避免死锁的方法
+##### 避免或减少资源共享
+##### 使用自旋锁
+
+```
+public void b1(){
+       try{
+              //立即获得锁，或者2秒等待锁资源
+              if(lock.tryLock(2 , TimeUtil.SECONDS)){
+                     System.out.print("进入B.b2()");
+              }
+       }catch(InterruptException e){
+              //异常处理
+       }finallt{
+              //释放锁
+              lock.unlock();
+       }
+}
+```
++ 上面的代码中使用`tryLock实现了自旋锁，它跟互斥锁一样，如果一个执行单元要想访问被自旋锁保护的共享资源，则必须先得到锁，在访问完共享资源后，也必须释放锁，如果在获取自旋锁时，没有任何执行单元保持该锁，那么将立即得到锁，如果在获取自旋锁时锁已经有保持者，那么获取锁操作将自旋在那里，直到该自旋锁的保持者释放了锁为止`；
+
