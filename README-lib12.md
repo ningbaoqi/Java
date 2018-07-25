@@ -10,4 +10,4 @@
 |load(String str)|加载库|
 |loadLibrary(String str)|加载库|
 
-![image](https://github.com/ningbaoqi/Java/blob/master/gif/pic-145.jpg) pic-145.jpg
+![image](https://github.com/ningbaoqi/Java/blob/master/gif/pic-145.jpg) 
