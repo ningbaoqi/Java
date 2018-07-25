@@ -11,7 +11,7 @@
 
 + 一旦创建了Proxy对象之后，程序就可以使用URLConnection打开连接时，或者创建Socket连接时传入一个Proxy对象，作为本次连接所使用的代理服务器；其中URL包含了URLConnection openConnection(Proxy proxy)方法，该方法使用指定的代理服务器来打开连接；而Socket则提供了一个Socket(Proxy proxy)构造器，该构造器使用指定的代理服务器来创建一个没有连接的Socket对象；
 
-![image](https://github.com/ningbaoqi/Java/blob/master/gif/pic-190.jpg) pic-190.jpg
+![image](https://github.com/ningbaoqi/Java/blob/master/gif/pic-190.jpg) 
 
 ### 使用ProxySelector自动选择代理服务器
 + ProxySelector代表一个代理选择器，它本身是一个抽象类，程序无法创建它的实例，开发者可以考虑继承ProxySelector来实现自己的代理服务器，实现ProxySelector的步骤非常简单，程序只要定义一个继承ProxySelector的类，并让该类实现如下两个抽象方法：
@@ -23,7 +23,7 @@
 
 + 实现自己的ProxySelector类之后，调用ProxySelector的setDefault(ProxySelector ps)静态方法来注册该代理选择器即可；
 
-![image](https://github.com/ningbaoqi/Java/blob/master/gif/pic-191.jpg) pic-191.jpg
+![image](https://github.com/ningbaoqi/Java/blob/master/gif/pic-191.jpg)
 
 + 除此之外，java为ProxySelector提供了一个实现类，DefaultProxySelector，系统已经将DefaultProxySelector注册成默认的代理选择器，因此程序可调用ProxySelector.getDefault()方法来获得DefaultProxySelector实例；DefaultProxySelector也实现了两个抽象方法，他的实现策略是：
 
