@@ -18,7 +18,7 @@
 |String getHostName()|获取此IP地址的主机名|
 |isReachable()|用于测试是否可以到达该地址|
 
-![image](https://github.com/ningbaoqi/Java/blob/master/gif/pic-150.jpg) pic-150.jpg
+![image](https://github.com/ningbaoqi/Java/blob/master/gif/pic-150.jpg)
 
 ### 使用URLDecoder和URLEncoder类
 + 编程过程中可能涉及普通祖字符串和特殊字符串的相关转换，就需要使用URLDecoder和URLEncoder类；
@@ -34,8 +34,7 @@
 |------|------|
 |static encode(String s,String enc)|可以将普通字符串转换成application/x-www-form-urlencode MIME字符串；编码|
 
-![image](https://github.com/ningbaoqi/Java/blob/master/gif/pic-151.jpg) pic-151.jpg
-
+![image](https://github.com/ningbaoqi/Java/blob/master/gif/pic-151.jpg)
 + 当采用不同的字符集时，每个中文字符对应的字节数并不完全相同，所以使用URLDecoder和URLEncoder类进行转换时也需要指定字符集；
 
 ### URL、URLConnection、URLPermission类
@@ -58,7 +57,7 @@ http://www.baidu.com/index.php
 |URLConnection openConnection()|返回一个URLConnection对象，它代表了与URL所引用的远程对象的连接|
 |InputStream openStream()|打开与此URL的连接，并返回一个用于读取该URL资源的InputStream|
 
-![image](https://github.com/ningbaoqi/Java/blob/master/gif/pic-152.jpg) pic-152.jpg
+![image](https://github.com/ningbaoqi/Java/blob/master/gif/pic-152.jpg)
 
 + java8新增了一个URLPermission工具类，用于管理HttpURLConnection 的访问权限，如果在HttpURLConnection安装了安全管理器，通过该对象打开连接时就需要先获得权限；
 
@@ -108,7 +107,7 @@ http://www.baidu.com/index.php
 
 + 如果即要使用输入流读取URLConnection响应的内容，又要使用输出流发送请求参数，则一定要先使用输出流，再使用输入流：
 
-![image](https://github.com/ningbaoqi/Java/blob/master/gif/pic-153.jpg) pic-153.jpg
-![image](https://github.com/ningbaoqi/Java/blob/master/gif/pic-154.jpg) pic-154.jpg
+![image](https://github.com/ningbaoqi/Java/blob/master/gif/pic-153.jpg) 
+![image](https://github.com/ningbaoqi/Java/blob/master/gif/pic-154.jpg) 
 
 + 如果程序可以确定远程响应的是字符流，则可以使用字符流来读取，如果程序无法确定远程响应的是字符流，则使用字节流读取即可；
