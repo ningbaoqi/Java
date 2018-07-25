@@ -24,3 +24,10 @@
 + 实现自己的ProxySelector类之后，调用ProxySelector的setDefault(ProxySelector ps)静态方法来注册该代理选择器即可；
 
 ![image](https://github.com/ningbaoqi/Java/blob/master/gif/pic-191.jpg) pic-191.jpg
+
++ 除此之外，java为ProxySelector提供了一个实现类，DefaultProxySelector，系统已经将DefaultProxySelector注册成默认的代理选择器，因此程序可调用ProxySelector.getDefault()方法来获得DefaultProxySelector实例；DefaultProxySelector也实现了两个抽象方法，他的实现策略是：
+
+|方法|说明|
+|------|-------|
+|connectFailed()|如果连接失败，DefaultProxySelector将会尝试不使用代理服务器，直接连接远程资源|
+|select()|DefaultProxySelector会根据系统属性来决定使用哪个代理服务器，ProxySelector会检测系统属性与URL之间的匹配，然后决定使用相应的属性值作为代理服务器，关于代理服务器常用的属性名有如下三个：http.proxyHost:设置HTTP访问所使用的代理服务器的主机地址，该属性名的前缀可以改为https、ftp等，分别用于设置HTTPS、FTP访问所用的代理服务器主机地址；http:proxyPort：设置HTTP访问所使用的代理服务器的端口，该属性名的前缀可以改为https、ftp等，分别用于设置HTTPS访问和FTP访问所用的代理服务器的端口；http.nonProxyHosts：设置HTTP访问中不需要使用代理服务器的主机，支持使用*通配符支持指定多个地址，多个地址之间用竖线分隔|
