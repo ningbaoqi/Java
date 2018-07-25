@@ -12,3 +12,5 @@
 [BigDecimal](https://github.com/ningbaoqi/Java/blob/master/README-lib7.md)
 ### ThreadLocalRandom
 [ThreadLocalRandom](https://github.com/ningbaoqi/Java/blob/master/README-lib8.md)
+### StringBuffer
+[StringBuffer](https://github.com/ningbaoqi/Java/blob/master/README-lib9.md)
