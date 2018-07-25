@@ -49,3 +49,22 @@ socket.send(packet);
 ![image](https://github.com/ningbaoqi/Java/blob/master/gif/pic-180.jpg) pic-180.jpg
 ![image](https://github.com/ningbaoqi/Java/blob/master/gif/pic-181.jpg) pic-181.jpg
 
+### 使用MulticastSocket实现多点广播
++ DatagramSocket只允许数据报发送给指定的目标地址，而MulticastSocket可以将数据报以广播方式发送到多个客户端。若要使用多点广播，则需要让一个数据报标有一组目标主机地址，当数据报发出后，整个组的所有主机都能收到该数据报，IP多点广播实现了将单一信息发送到多个接收者的广播，其思想是设置一组特殊网络地址作为多点广播地址，每个多点广播地址都被看作一个组，当客户端需要发送、接收广播信息时，加入到该组即可；IP协议为多点广播提供了这批特殊的IP地址，这些IP地址的范围是224.0.0.0至239.255.255.255；
+
+|MulticastSocket提供了如下三个构造器|说明|
+|------|------|
+|public MulticastSocket()|使用本机默认地址、随机端口来创建MulticastSocket对象|
+|public MulticastSocket(int portNumber)|使用本机默认地址、指定端口来创建MulticastSocket对象|
+|public MulticastSocket(SocketAddress bindaddr)|使用本机指定IP地址、指定端口来创建MulticastSocket对象|
+
++ 创建MulticastSocket对象后，还需要将该MulticastSocket加入到指定的多点广播地址，MulticastSocket使用joinGroup()方法加入指定组，使用leaveGroup()方法脱离一个组；
+
+|方法|说明|
+|------|------|
+|joinGroup(InetAddress multicastAddr)|将该MulticastSocket加入指定的多点广播地址|
+|leaveGroup(InetAddress multicastAddr)|将该MulticastSocket离开指定的多点广播地址|
+
++ 在某些系统中，可能有多个网络接口，这可能会给多点广播带来问题，这时候程序需要在一个指定的网络接口上监听，通过调用setInterface()方法可以强制MulticastSocket使用指定的网络接口，也可以使用getInterface()方法查询MulticastSocket监听的网络接口；如果创建仅用于发送数据报的MulticastSocket对象，则使用默认地址、随机端口即可，但如果创建接收用的MulticastSocket对象，则该MulticastSocket对象必须具有指定端口，否则发送方无法确定发送数据报的目标端口；MulticastSocket比DatagramSocket多了一个setTimeToLive(int tt1)方法，该tt1参数用于设置数据报最多可以跨过多少个网络，当tti为0时，指定数据报应停留在本地主机，当tt1为1，指定数据报发送到本地局域网，当tt1为32，意味着只能发送到本站点的网络上，当tt1为64，意味着数据报应该保留到本地区，当tt1为128，意味着数据报应保留在本大洲，当tt1为255，意味着数据报可以发送到所有地方，在默认情况下，tt1的值为1；
+
+![image](https://github.com/ningbaoqi/Java/blob/master/gif/pic-182.jpg) pic-182.jpg
