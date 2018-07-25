@@ -108,3 +108,7 @@ http://www.baidu.com/index.php
 
 + 如果即要使用输入流读取URLConnection响应的内容，又要使用输出流发送请求参数，则一定要先使用输出流，再使用输入流：
 
+![image](https://github.com/ningbaoqi/Java/blob/master/gif/pic-153.jpg) pic-153.jpg
+![image](https://github.com/ningbaoqi/Java/blob/master/gif/pic-154.jpg) pic-154.jpg
+
++ 如果程序可以确定远程响应的是字符流，则可以使用字符流来读取，如果程序无法确定远程响应的是字符流，则使用字节流读取即可；
