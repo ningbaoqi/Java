@@ -14,6 +14,6 @@
 |void set(int year,int month,int date,int hourofday,int minute,int second)|设置日历对象的年、月、日、时、分、秒的值|
 |setLenient（boolean boo）|设置容错性|
 
-![image](https://github.com/ningbaoqi/Java/blob/master/gif/pic-110.jpg) pic-110.jpg
+![image](https://github.com/ningbaoqi/Java/blob/master/gif/pic-110.jpg)
 
 + 使用set方法将月设置成了15，在打开容错性的时候不会报错，会进位，但是关闭容错性就会报错：关于容错性的方法为：`setLenient(boolean boo)`；
