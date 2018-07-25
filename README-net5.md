@@ -13,3 +13,14 @@
 
 ![image](https://github.com/ningbaoqi/Java/blob/master/gif/pic-190.jpg) pic-190.jpg
 
+### 使用ProxySelector自动选择代理服务器
++ ProxySelector代表一个代理选择器，它本身是一个抽象类，程序无法创建它的实例，开发者可以考虑继承ProxySelector来实现自己的代理服务器，实现ProxySelector的步骤非常简单，程序只要定义一个继承ProxySelector的类，并让该类实现如下两个抽象方法：
+
+|方法|说明|
+|------|------|
+|`List<Proxy> select(URI uri )`|根据业务需要返回代理服务器列表，如果该方法返回的集合中只包含一个Proxy，该Proxy将会作为默认的代理服务器|
+|`connectFailed(URI uri , SocketAddress sa , IOException ioe)`|连接代理服务器失败时回调该方法|
+
++ 实现自己的ProxySelector类之后，调用ProxySelector的setDefault(ProxySelector ps)静态方法来注册该代理选择器即可；
+
+![image](https://github.com/ningbaoqi/Java/blob/master/gif/pic-191.jpg) pic-191.jpg
