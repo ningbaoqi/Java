@@ -15,5 +15,5 @@
 ### 自定义类实现克隆的步骤
 + 一、自定义类实现Cloneable接口，这是一个标记性的接口，实现该接口的对象可以实现自我克隆，接口中没有定义任何方法；二、自定义类实现自己clone方法；三、实现clone（）方法时通过super.clone()；调用Object实现的clone()方法来得到该对象的副本，并返回该副本；
 
-![image](https://github.com/ningbaoqi/Java/blob/master/gif/pic-100.jpg)  pic-100.jpg
-![image](https://github.com/ningbaoqi/Java/blob/master/gif/pic-101.jpg)  pic-101.jpg
+![image](https://github.com/ningbaoqi/Java/blob/master/gif/pic-100.jpg) 
+![image](https://github.com/ningbaoqi/Java/blob/master/gif/pic-101.jpg) 
