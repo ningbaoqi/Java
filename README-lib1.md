@@ -10,3 +10,5 @@
 [Calendar](https://github.com/ningbaoqi/Java/blob/master/README-lib6.md)
 ### BigDecimal
 [BigDecimal](https://github.com/ningbaoqi/Java/blob/master/README-lib7.md)
+### ThreadLocalRandom
+[ThreadLocalRandom](https://github.com/ningbaoqi/Java/blob/master/README-lib8.md)
